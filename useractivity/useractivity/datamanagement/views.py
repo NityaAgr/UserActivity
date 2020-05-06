@@ -2,6 +2,8 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import HttpResponseBadRequest
+from django.http import JsonResponse
+
 
 # Create your views here.
 from . import models
@@ -23,29 +25,31 @@ class Users(APIView):
     def post(self, request):
         response = {}
 
+        jsondata = request.data
         users = request.data["members"]
         print(request.data["ok"])
 
        
-        # try:
-        for user in users :
-            person = models.User()
-            person.id = user["id"]
-            person.real_name = user["real_name"]
-            person.tz = user["tz"]
-            person.save()
-            for activity in user["activity_periods"]:
-                activity_period = models.UserActivity()
-                activity_period.start_time = activity["start_time"]
-                activity_period.end_time = activity["end_time"]
-                activity_period.user = person
-                activity_period.save()
+        try:
+            for user in users :
+                person = models.User()
+                person.id = user["id"]
+                person.real_name = user["real_name"]
+                person.tz = user["tz"]
+                person.save()
+                for activity in user["activity_periods"]:
+                    activity_period = models.UserActivity()
+                    activity_period.start_time = activity["start_time"]
+                    activity_period.end_time = activity["end_time"]
+                    activity_period.user = person
+                    activity_period.save()
+                return JsonResponse(jsondata, safe=False)
 
 
-        
-        # # except Exception as e :
-        #     print(str(e))
-        #     return HttpResponseBadRequest(str(e))
+
+        except Exception as e:
+            return HttpResponseBadRequest(str(e))
+
             
         return Response(response)
 
