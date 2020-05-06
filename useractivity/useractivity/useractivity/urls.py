@@ -20,7 +20,7 @@ from datamanagement import views
 
 router = routers.DefaultRouter()
 router.register(r'user', views.UserViewSet)
-#router.register(r'groups', views.GroupViewSet)
+router.register(r'activity', views.ActivityViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
