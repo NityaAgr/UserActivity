@@ -38,25 +38,22 @@ class UsersDetail(APIView):
        
         # To fetch values of respective key and save them in DB
         try:
-            if jsondata["ok"] == True :
-                for user in users :
-                    person = models.User()
-                    person.id = user["id"]
-                    person.real_name = user["real_name"]
-                    person.tz = user["tz"]
-                    person.save()
-                    for activity in user["activity_periods"]:
-                        activityPeriod = models.UserActivity()
-                        activityPeriod.start_time = activity["start_time"]
-                        activityPeriod.end_time = activity["end_time"]
-                        activityPeriod.user = person
-                        # Insert the given values into the database.
-                        activityPeriod.save()
-                    return JsonResponse(jsondata, safe=False)
-            else:
-                return HttpResponseBadRequest("No JSON input present in right format")
-
-
+            
+            for user in users :
+                person = models.User()
+                person.id = user["id"]
+                person.real_name = user["real_name"]
+                person.tz = user["tz"]
+                person.save()
+                for activity in user["activity_periods"]:
+                    activityPeriod = models.UserActivity()
+                    activityPeriod.start_time = activity["start_time"]
+                    activityPeriod.end_time = activity["end_time"]
+                    activityPeriod.user = person
+                    # Insert the given values into the database.
+                    activityPeriod.save()
+                return JsonResponse(jsondata, safe=False)
+     
         except Exception as e:
             return HttpResponseBadRequest(str(e))
 
@@ -94,7 +91,5 @@ class UsersDetail(APIView):
 
         except Exception as e:
             response["ok"] = False
-
-
             
         return JsonResponse(response, safe=False)

@@ -7,6 +7,7 @@ from . import models
 # Serializer call to fetch data from model and convert into Python datatype to render JSON
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.CharField()
     class Meta:
         model = models.User
         fields = '__all__'
